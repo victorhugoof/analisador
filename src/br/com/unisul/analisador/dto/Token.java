@@ -3,29 +3,35 @@ package br.com.unisul.analisador.dto;
 public class Token {
 
 	private int id;
-	private String lexeme;
+	private String token;
 	private int position;
+	private String descricao;
 
-	public Token(int id, String lexeme, int position) {
+	public Token(int id, String token, int position, String descricao) {
 		this.id = id;
-		this.lexeme = lexeme;
+		this.token = token;
 		this.position = position;
+		this.descricao = descricao;
 	}
 
 	public final int getId() {
 		return id;
 	}
 
-	public final String getLexeme() {
-		return lexeme;
+	public final String getToken() {
+		return token;
 	}
 
 	public final int getPosition() {
 		return position;
 	}
 
+	public String getDescricao() {
+		return descricao;
+	}
+
 	public String toString() {
-		return id + " ( " + lexeme + " ) @ " + position;
+		return id + " ( '" + token + "' ) - " + descricao + " @ " + position;
 	}
 
 }

@@ -16,13 +16,13 @@ public class AnalisadorSintatico implements Constants {
 	private AnalisadorLexico scanner;
 	private AnalisadorSemantico semanticAnalyser;
 
-	private static final boolean isTerminal(int x) {
-		return x < FIRST_NON_TERMINAL;
-	}
-
-	private static final boolean isNonTerminal(int x) {
-		return x >= FIRST_NON_TERMINAL && x < FIRST_SEMANTIC_ACTION;
-	}
+//	private static final boolean isTerminal(int x) {
+//		return x < FIRST_NON_TERMINAL;
+//	}
+//
+//	private static final boolean isNonTerminal(int x) {
+//		return x >= FIRST_NON_TERMINAL && x < FIRST_SEMANTIC_ACTION;
+//	}
 
 	private static final boolean isSemanticAction(int x) {
 		return x >= FIRST_SEMANTIC_ACTION;
@@ -32,9 +32,9 @@ public class AnalisadorSintatico implements Constants {
 		if (currentToken == null) {
 			int pos = 0;
 			if (previousToken != null)
-				pos = previousToken.getPosition() + previousToken.getLexeme().length();
+				pos = previousToken.getPosition() + previousToken.getToken().length();
 
-			currentToken = new Token(DOLLAR, "$", pos);
+			currentToken = new Token(DOLLAR, "$", pos, "FINAL");
 		}
 
 		int x = ((Integer) stack.pop()).intValue();

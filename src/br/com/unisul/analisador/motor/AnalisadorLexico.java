@@ -59,9 +59,11 @@ public class AnalisadorLexico implements Constants {
         if (token == 0) {
             return proximoToken();
         } else {
-            String lexeme = entrada.substring(start, fim);
-            token = buscarToken(token, lexeme);
-            return new Token(token, lexeme, start);
+            String nome = entrada.substring(start, fim);
+
+            Object[] tokenArray = buscarToken(token, nome);
+            token = (int) tokenArray[0];
+            return new Token(token, nome, start, (String) tokenArray[1]);
         }
     }
 
@@ -93,9 +95,10 @@ public class AnalisadorLexico implements Constants {
      * Busca o valor de um token
      * @param base
      * @param key
-     * @return
+     * @return 1-> token
+     *         2-> descricao
      */
-    public int buscarToken(int base, String key) {
+    public Object[] buscarToken(int base, String key) {
         int start = SPECIAL_CASES_INDEXES[base];
         int end   = SPECIAL_CASES_INDEXES[base+1]-1;
 
@@ -104,7 +107,7 @@ public class AnalisadorLexico implements Constants {
             int comp = SPECIAL_CASES_KEYS[half].compareTo(key);
 
             if (comp == 0) {
-                return SPECIAL_CASES_VALUES[half];
+                return new Object[]{SPECIAL_CASES_VALUES[half], "PALAVRA RESERVADA"};
             } else if (comp < 0) {
                 start = half + 1;
             } else { //(comp > 0)
@@ -112,7 +115,7 @@ public class AnalisadorLexico implements Constants {
             }
         }
 
-        return base;
+        return new Object[]{base, isTerminal(base) ? "TERMINAL" : (isNonTerminal(base) ? "NÃO TERMINAL" : "SEMANTICO")};
     }
 
     /**
