@@ -21,7 +21,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Analizador Léxico");
+		primaryStage.setTitle("Analizador Lï¿½xico");
 		primaryStage.show();
 	}
 

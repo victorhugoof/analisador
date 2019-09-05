@@ -68,7 +68,7 @@ public class AnalisadorLexico implements Constants {
     }
 
     /**
-     * Método responsável por buscar o proximo estado do char
+     * Mï¿½todo responsï¿½vel por buscar o proximo estado do char
      * @param c
      * @param state
      * @return
@@ -79,7 +79,7 @@ public class AnalisadorLexico implements Constants {
     }
 
     /**
-     * Método responsável por buscar o token de um estado
+     * Mï¿½todo responsï¿½vel por buscar o token de um estado
      * @param state
      * @return
      */
@@ -104,7 +104,7 @@ public class AnalisadorLexico implements Constants {
 
         while (start <= end) {
             int half = (start+end)/2;
-            int comp = SPECIAL_CASES_KEYS[half].compareTo(key);
+            int comp = SPECIAL_CASES_KEYS[half].compareToIgnoreCase(key);
 
             if (comp == 0) {
                 return new Object[]{SPECIAL_CASES_VALUES[half], "PALAVRA RESERVADA"};
@@ -115,7 +115,7 @@ public class AnalisadorLexico implements Constants {
             }
         }
 
-        return new Object[]{base, isTerminal(base) ? "TERMINAL" : (isNonTerminal(base) ? "NÃO TERMINAL" : "SEMANTICO")};
+        return new Object[]{base, isTerminal(base) ? "TERMINAL" : (isNonTerminal(base) ? "Nï¿½O TERMINAL" : "SEMANTICO")};
     }
 
     /**
