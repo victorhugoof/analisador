@@ -1,27 +1,41 @@
 package br.com.unisul.analisador.motor;
 
-import br.com.unisul.analisador.constants.Constants;
+import br.com.unisul.analisador.constants.Funcoes;
 import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.LexicoException;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-public class AnalisadorLexico implements Constants {
+public class AnalisadorLexico implements Funcoes {
 
     private int posicaoAtual;
     private String entrada;
 
-    public AnalisadorLexico() {
-        this(new StringReader(""));
+    public static List<Token> executa(String input) throws LexicoException {
+        List<Token> tokens = new ArrayList<>();
+        AnalisadorLexico lexico = new AnalisadorLexico(input);
+
+        Token token = lexico.proximoToken();
+
+        while (Objects.nonNull(token)) {
+            tokens.add(token);
+            token = lexico.proximoToken();
+        }
+
+        return tokens;
     }
 
-    public AnalisadorLexico(Reader input) {
-        setEntrada(input);
+    private AnalisadorLexico(String input) {
+        this.entrada = input;
+        this.posicaoAtual = 0;
     }
 
-    public Token proximoToken() throws LexicoException {
+    private Token proximoToken() throws LexicoException {
 
         if (!possuiChar()) {
             return null;
@@ -68,7 +82,7 @@ public class AnalisadorLexico implements Constants {
     }
 
     /**
-     * Mï¿½todo responsï¿½vel por buscar o proximo estado do char
+     * Método responsável por buscar o proximo estado do char
      * @param c
      * @param state
      * @return
@@ -79,7 +93,7 @@ public class AnalisadorLexico implements Constants {
     }
 
     /**
-     * Mï¿½todo responsï¿½vel por buscar o token de um estado
+     * Método responsável por buscar o token de um estado
      * @param state
      * @return
      */
@@ -95,8 +109,8 @@ public class AnalisadorLexico implements Constants {
      * Busca o valor de um token
      * @param base
      * @param key
-     * @return 1-> token
-     *         2-> descricao
+     * @return 0-> token
+     *         1-> descricao
      */
     public Object[] buscarToken(int base, String key) {
         int start = SPECIAL_CASES_INDEXES[base];
@@ -110,12 +124,12 @@ public class AnalisadorLexico implements Constants {
                 return new Object[]{SPECIAL_CASES_VALUES[half], "PALAVRA RESERVADA"};
             } else if (comp < 0) {
                 start = half + 1;
-            } else { //(comp > 0)
+            } else {
                 end = half - 1;
             }
         }
 
-        return new Object[]{base, isTerminal(base) ? "TERMINAL" : (isNonTerminal(base) ? "Nï¿½O TERMINAL" : "SEMANTICO")};
+        return new Object[]{base, isTerminal(base) ? getDescricaoTerminal(key) : (nonTerminal(base) ? "NÃO TERMINAL" : "SEMANTICO")};
     }
 
     /**
@@ -136,27 +150,5 @@ public class AnalisadorLexico implements Constants {
         } else {
             return (char) -1;
         }
-    }
-
-    public void setEntrada(Reader input) {
-        StringBuffer bfr = new StringBuffer();
-
-        try {
-            int c = input.read();
-            while (c != -1) {
-                bfr.append((char)c);
-                c = input.read();
-            }
-            this.entrada = bfr.toString();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setPosicaoAtual(0);
-    }
-
-    public void setPosicaoAtual(int pos) {
-        posicaoAtual = pos;
     }
 }

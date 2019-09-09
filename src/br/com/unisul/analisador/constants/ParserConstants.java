@@ -120,7 +120,7 @@ public interface ParserConstants {
 
     String[] PARSER_ERROR = {
         "",
-        "Era esperado fim de programa",
+        "Era esperado fim de programa.txt",
         "Era esperado \"+\"",
         "Era esperado \"-\"",
         "Era esperado \"*\"",

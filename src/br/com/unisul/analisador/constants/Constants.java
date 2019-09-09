@@ -48,12 +48,4 @@ public interface Constants extends ScannerConstants, ParserConstants {
     int t_TO = 43;
     int t_CASE = 44;
     int t_OF = 45;
-
-    default boolean isTerminal(int x) {
-        return x < FIRST_NON_TERMINAL;
-    }
-
-    default boolean isNonTerminal(int x) {
-        return x >= FIRST_NON_TERMINAL && x < FIRST_SEMANTIC_ACTION;
-    }
 }
