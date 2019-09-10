@@ -118,10 +118,11 @@ public class AnalisadorLexico implements Funcoes {
 
         while (start <= end) {
             int half = (start+end)/2;
-            int comp = SPECIAL_CASES_KEYS[half].compareToIgnoreCase(key);
+            String special = SPECIAL_CASES_KEYS[half];
+            int comp = special.compareToIgnoreCase(key);
 
             if (comp == 0) {
-                return new Object[]{SPECIAL_CASES_VALUES[half], "PALAVRA RESERVADA"};
+                return new Object[]{SPECIAL_CASES_VALUES[half], "PALAVRA RESERVADA [ " + special + " ]"};
             } else if (comp < 0) {
                 start = half + 1;
             } else {
