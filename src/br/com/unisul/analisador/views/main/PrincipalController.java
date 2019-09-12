@@ -5,6 +5,7 @@ import br.com.unisul.analisador.exception.LexicoException;
 import br.com.unisul.analisador.exception.SintaticoException;
 import br.com.unisul.analisador.motor.AnalisadorLexico;
 import br.com.unisul.analisador.motor.AnalisadorSintatico;
+import br.com.unisul.analisador.motor.AnalisadorSintaticoDefault;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,8 +52,6 @@ public class PrincipalController implements Initializable {
 		codigo.setCellValueFactory(new PropertyValueFactory<>("id"));
 		token.setCellValueFactory(new PropertyValueFactory<>("token"));
 		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
-
-//		lerArquivo(new File(getClass().getResource("/programa.txt").getFile()));
 	}
 
 	@FXML
@@ -67,11 +66,18 @@ public class PrincipalController implements Initializable {
 			txtOutSintatico.setText("Analisador Sintático executado com sucesso!");
 			
 		} catch (LexicoException e) {
-			e.printStackTrace();
 			txtOut.setText(e.toString());
 		} catch (SintaticoException ex) {
-			ex.printStackTrace();
 			txtOutSintatico.setText(ex.toString());
+		}
+
+		/**
+		 * Executa com o analisador padr�o do gals, somente para via de compara��o
+		 */
+		try {
+			new AnalisadorSintaticoDefault().parse(new AnalisadorLexico(txtIn.getText()));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
