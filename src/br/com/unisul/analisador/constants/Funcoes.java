@@ -13,7 +13,7 @@ public interface Funcoes extends Constants {
 	}
 
 	/**
-	 * Método que busca descrição de um token terminal
+	 * Mï¿½todo que busca descriï¿½ï¿½o de um token terminal
 	 * @return
 	 */
 	default String getDescricaoTerminal(String key) {
@@ -35,10 +35,10 @@ public interface Funcoes extends Constants {
 
 enum EnumTerminais {
 
-	SINAL_MAIS("+", "Sinal de Adição"),
-	SINAL_MENOS("-", "Sinal de Subtração"),
-	SINAL_MULTIPLICACAO("*", "Sinal de Multiplicação"),
-	SINAL_DIVISAO("/", "Sinal de Divisão"),
+	SINAL_MAIS("+", "Sinal de AdiÃ§Ã£o"),
+	SINAL_MENOS("-", "Sinal de SubtraÃ§Ã£o"),
+	SINAL_MULTIPLICACAO("*", "Sinal de MultiplicaÃ§Ã£o"),
+	SINAL_DIVISAO("/", "Sinal de DivisÃ£o"),
 	ABRE_PARENTESES(")", "Abre Parenteses"),
 	FECHA_PARENTESES(")", "Fecha Parenteses"),
 	DOIS_PONTOS_IGUAL(":=", "Dois Pontos Igual"),
@@ -49,8 +49,8 @@ enum EnumTerminais {
 	MENOR_IGUAL("<=", "Sinal de Menor ou Igual"),
 	MAIOR_IGUAL(">=", "Sinal de Maior ou Igual"),
 	DIFERENTE("<>", "Sinal de Diferente"),
-	VIRGULA(",", "Vírgula"),
-	PONTO_VIRGULA(";", "Ponto e Vírgula"),
+	VIRGULA(",", "Virgula"),
+	PONTO_VIRGULA(";", "Ponto e Virgula"),
 	PONTO(".", "Ponto");
 
 	private String key;

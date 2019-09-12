@@ -52,7 +52,7 @@ public class PrincipalController implements Initializable {
 		token.setCellValueFactory(new PropertyValueFactory<>("token"));
 		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-		lerArquivo(new File(getClass().getResource("/programa.txt").getFile()));
+//		lerArquivo(new File(getClass().getResource("/programa.txt").getFile()));
 	}
 
 	@FXML
@@ -61,10 +61,10 @@ public class PrincipalController implements Initializable {
 			
 			List<Token> tokens = AnalisadorLexico.executa(txtIn.getText());
 			preencheTabelaTokens(tokens);
-			txtOut.setText("Analisador LÈxico executado com sucesso!");
+			txtOut.setText("Analisador L√©xico executado com sucesso!");
 
 			AnalisadorSintatico.executa(tokens);
-			txtOutSintatico.setText("Analisador Sint·tico executado com sucesso!");
+			txtOutSintatico.setText("Analisador Sint√°tico executado com sucesso!");
 			
 		} catch (LexicoException e) {
 			e.printStackTrace();

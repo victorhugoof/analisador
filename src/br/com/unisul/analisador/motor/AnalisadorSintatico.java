@@ -10,7 +10,7 @@ import java.util.Stack;
 
 public class AnalisadorSintatico implements Funcoes {
 
-	private Stack<Integer> fila;
+	private Stack<Integer> fila; 
 	private List<Token> tokens;
 	private Token tokenAtual;
 	private Token tokenAnterior;
@@ -20,8 +20,11 @@ public class AnalisadorSintatico implements Funcoes {
 	}
 
 	private AnalisadorSintatico(List<Token> tokens) {
+		
 		this.tokens = tokens;
+		
 		this.fila = new Stack<>();
+		
 	}
 
 	/**
@@ -33,8 +36,8 @@ public class AnalisadorSintatico implements Funcoes {
 		/**
 		 * Adiciona tokens iniciais na fila
 		 */
-		addFila(DOLLAR);
-		addFila(START_SYMBOL);
+		addFila(DOLLAR); // 1
+		addFila(START_SYMBOL); // 46
 
 		/**
 		 * Inicia o processo buscando o primeiro token da lista.
@@ -44,11 +47,12 @@ public class AnalisadorSintatico implements Funcoes {
 		/**
 		 * Enquanto houver token na lista continuará processando
 		 */
+		
 		while (!tokens.isEmpty()) {
 			verificaAdicionaTokenFinalPrograma();
 
 			Integer topo = topoFila();
-
+			
 			/**
 			 * Caso for o EPSILON pula para o próximo token da fila
 			 */
@@ -87,9 +91,24 @@ public class AnalisadorSintatico implements Funcoes {
 			proximoToken();
 
 		} else {
-
-			throw new SintaticoException(PARSER_ERROR[topo], tokenAtual.getPosition());
+			
+			throw new SintaticoException(mensagem() + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
+	}
+	
+	
+	public String mensagem() {
+		String texto = "";
+		
+		if(tokenAnterior != null){
+			texto += "Após a sintaxe '" + tokenAnterior.getToken() + "' ";
+		}
+		
+		if(tokenAtual != null){
+			texto += " consta erro na escrita '" + tokenAtual.getToken() + "' ";
+		}
+		
+		return texto;
 	}
 
 	/**
@@ -107,11 +126,15 @@ public class AnalisadorSintatico implements Funcoes {
 			int size = productions.length;
 
 			for (int i = size - 1; i >= 0; i--) {
-				addFila(productions[i]);
+				
+				//So adiciona se a produção não for vazia/E
+				if(productions[i] != 0) {
+					addFila(productions[i]);
+				}
 			}
 
 		} else {
-			throw new SintaticoException(PARSER_ERROR[topo], tokenAtual.getPosition());
+			throw new SintaticoException(mensagem() + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
 	}
 
@@ -163,7 +186,7 @@ public class AnalisadorSintatico implements Funcoes {
 	 * @return
 	 */
 	private boolean filaVazia() {
-		return this.fila.isEmpty();
+		return this.fila.isEmpty();	
 	}
 
 	/**
