@@ -2,6 +2,8 @@ package br.com.unisul.analisador.constants;
 
 import java.util.Objects;
 
+import br.com.unisul.analisador.dto.Token;
+
 public interface Funcoes extends Constants {
 
 	default boolean isTerminal(int token) {
@@ -24,12 +26,32 @@ public interface Funcoes extends Constants {
 
 		} else {
 			try {
-				int number = Integer.parseInt(key);
+				Integer.parseInt(key);
 				return "INTEIRO";
 			} catch (Exception e) {}
 		}
 
 		return "TERMINAL";
+	}
+	
+	/**
+	 * Busca mensagem padrão de erro
+	 * @param anterior
+	 * @param atual
+	 * @return
+	 */
+	default String getMensagemErro(Token anterior, Token atual) {
+		String texto = "";
+		
+		if (Objects.nonNull(anterior)){
+			texto += "Após a sintaxe '" + anterior.getToken() + "' ";
+		}
+		
+		if (Objects.nonNull(atual)){
+			texto += " consta erro na escrita '" + atual.getToken() + "' ";
+		}
+		
+		return texto;
 	}
 }
 

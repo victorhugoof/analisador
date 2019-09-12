@@ -10,11 +10,11 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		AnchorPane root = FXMLLoader.load(getClass().getResource("../views/main/Principal.fxml"));
+		AnchorPane root = FXMLLoader.load(getClass().getResource("/br/com/unisul/analisador/views/main/Principal.fxml"));
 		Scene scene = new Scene(root);
 
 		primaryStage.setScene(scene);
-		primaryStage.setTitle("Analizador Léxico");
+		primaryStage.setTitle("Analizador");
 		primaryStage.show();
 	}
 

@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -47,15 +48,18 @@ public class PrincipalController implements Initializable {
 	private TextArea txtOutSintatico;
 
 	@Override
-	@FXML
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		codigo.setCellValueFactory(new PropertyValueFactory<>("id"));
 		token.setCellValueFactory(new PropertyValueFactory<>("token"));
-		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));	
 	}
 
 	@FXML
 	public void analizar() {
+		txtOut.setText("");
+		txtOutSintatico.setText("");
+		preencheTabelaTokens(Collections.emptyList());
+		
 		try {
 			
 			List<Token> tokens = AnalisadorLexico.executa(txtIn.getText());

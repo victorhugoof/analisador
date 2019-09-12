@@ -3,7 +3,9 @@ package br.com.unisul.analisador.exception;
 import java.util.Objects;
 
 public abstract class AnalisadorException extends Exception {
-    private int position;
+	private static final long serialVersionUID = 1L;
+	
+	private int position;
 
     public AnalisadorException(String msg, int position) {
         super(msg);

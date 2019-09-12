@@ -1,15 +1,12 @@
 package br.com.unisul.analisador.motor;
 
-import br.com.unisul.analisador.constants.Funcoes;
-import br.com.unisul.analisador.dto.Token;
-import br.com.unisul.analisador.exception.LexicoException;
-
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import br.com.unisul.analisador.constants.Funcoes;
+import br.com.unisul.analisador.dto.Token;
+import br.com.unisul.analisador.exception.LexicoException;
 
 public class AnalisadorLexico implements Funcoes {
 
@@ -17,19 +14,28 @@ public class AnalisadorLexico implements Funcoes {
     private String entrada;
 
     public static List<Token> executa(String input) throws LexicoException {
-        List<Token> tokens = new ArrayList<>();
-        AnalisadorLexico lexico = new AnalisadorLexico(input);
-
-        Token token = lexico.proximoToken();
-
-        while (Objects.nonNull(token)) {
-            tokens.add(token);
-            token = lexico.proximoToken();
-        }
-
-        tokens.add(lexico.proximoToken());
-
-        return tokens;
+    	try {
+	        List<Token> tokens = new ArrayList<>();
+	        AnalisadorLexico lexico = new AnalisadorLexico(input);
+	
+	        Token token = lexico.proximoToken();
+	
+	        while (Objects.nonNull(token)) {
+	            tokens.add(token);
+	            token = lexico.proximoToken();
+	        }
+	        
+	        /**
+	         * Adiciona ultimo token nulo para identificar fina
+	         */ 
+	        tokens.add(lexico.proximoToken());
+	
+	        return tokens;
+    	} catch (LexicoException lx) {
+    		throw lx;
+    	} catch (Exception e) {
+    		throw new LexicoException("Erro inesperado: " + e.getMessage());
+    	}
     }
 
     public AnalisadorLexico(String input) {
@@ -84,7 +90,7 @@ public class AnalisadorLexico implements Funcoes {
     }
 
     /**
-     * Método responsável por buscar o proximo estado do char
+     * Mï¿½todo responsï¿½vel por buscar o proximo estado do char
      * @param c
      * @param state
      * @return
@@ -95,7 +101,7 @@ public class AnalisadorLexico implements Funcoes {
     }
 
     /**
-     * Método responsável por buscar o token de um estado
+     * Mï¿½todo responsï¿½vel por buscar o token de um estado
      * @param state
      * @return
      */
@@ -132,7 +138,7 @@ public class AnalisadorLexico implements Funcoes {
             }
         }
 
-        return new Object[]{base, isTerminal(base) ? getDescricaoTerminal(key) : (nonTerminal(base) ? "NÃO TERMINAL" : "SEMANTICO")};
+        return new Object[]{base, isTerminal(base) ? getDescricaoTerminal(key) : (nonTerminal(base) ? "Nï¿½O TERMINAL" : "SEMANTICO")};
     }
 
     /**

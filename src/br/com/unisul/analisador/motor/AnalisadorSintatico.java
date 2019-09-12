@@ -16,9 +16,15 @@ public class AnalisadorSintatico implements Funcoes {
 	private Token tokenAnterior;
 
 	public static void executa(List<Token> tokens) throws SintaticoException {
-		new AnalisadorSintatico(tokens).processaTokens();
-	}
-
+		try {
+			new AnalisadorSintatico(tokens).processaTokens();
+		} catch (SintaticoException se) {
+			throw se;
+		} catch (Exception e) {
+			throw new SintaticoException("Erro inesperado: " + e.getMessage());
+		}
+	} 
+ 
 	private AnalisadorSintatico(List<Token> tokens) {
 		
 		this.tokens = tokens;
@@ -85,6 +91,8 @@ public class AnalisadorSintatico implements Funcoes {
 
 			/**
 			 * Se a fila estiver vazia significa que já está no ultimo token, não realiza nada.
+			 * 
+			 * Se houver mais token que fila
 			 */
 			if (filaVazia()) {
 				return;
@@ -97,23 +105,8 @@ public class AnalisadorSintatico implements Funcoes {
 
 		} else {
 			
-			throw new SintaticoException(mensagem() + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
+			throw new SintaticoException(getMensagemErro(tokenAnterior, tokenAtual) + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
-	}
-	
-	
-	public String mensagem() {
-		String texto = "";
-		
-		if(tokenAnterior != null){
-			texto += "Após a sintaxe '" + tokenAnterior.getToken() + "' ";
-		}
-		
-		if(tokenAtual != null){
-			texto += " consta erro na escrita '" + tokenAtual.getToken() + "' ";
-		}
-		
-		return texto;
 	}
 
 	/**
@@ -130,16 +123,17 @@ public class AnalisadorSintatico implements Funcoes {
 			int[] productions = PRODUCTIONS[parse];
 			int size = productions.length;
 
+			/**
+			 * Adiciona as producoes na fila em ordem inversa
+			 */
 			for (int i = size - 1; i >= 0; i--) {
 				
 				//So adiciona se a produção não for vazia/E
-				if(productions[i] != 0) {
-					addFila(productions[i]);
-				}
+				addFila(productions[i]);
 			}
 
 		} else {
-			throw new SintaticoException(mensagem() + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
+			throw new SintaticoException(getMensagemErro(tokenAnterior, tokenAtual) + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
 	}
 
