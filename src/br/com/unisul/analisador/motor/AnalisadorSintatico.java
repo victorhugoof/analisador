@@ -70,6 +70,11 @@ public class AnalisadorSintatico implements Funcoes {
 	private void processaTokenTerminal(Integer topo) throws SintaticoException {
 
 		/**
+		 * Remove o último token buscado na lista para que busque o próximo
+		 */
+		this.tokens.remove(0);
+
+		/**
 		 * Se o token atual for o mesmo do topo da fila realiza o processo, caso contrário dispara exceção
 		 */
 		if (topo.compareTo(tokenAtual.getId()) == 0) {
@@ -175,6 +180,5 @@ public class AnalisadorSintatico implements Funcoes {
 		}
 
 		this.tokenAtual = this.tokens.get(0);
-		this.tokens.remove(0);
 	}
 }

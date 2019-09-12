@@ -27,15 +27,17 @@ public class AnalisadorLexico implements Funcoes {
             token = lexico.proximoToken();
         }
 
+        tokens.add(lexico.proximoToken());
+
         return tokens;
     }
 
-    private AnalisadorLexico(String input) {
+    public AnalisadorLexico(String input) {
         this.entrada = input;
         this.posicaoAtual = 0;
     }
 
-    private Token proximoToken() throws LexicoException {
+    public Token proximoToken() throws LexicoException {
 
         if (!possuiChar()) {
             return null;
