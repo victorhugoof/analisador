@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -47,23 +48,26 @@ public class PrincipalController implements Initializable {
 	private TextArea txtOutSintatico;
 
 	@Override
-	@FXML
-	public void initialize(URL location, ResourceBundle resources) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		codigo.setCellValueFactory(new PropertyValueFactory<>("id"));
 		token.setCellValueFactory(new PropertyValueFactory<>("token"));
-		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));	
 	}
 
 	@FXML
 	public void analizar() {
+		txtOut.setText("");
+		txtOutSintatico.setText("");
+		preencheTabelaTokens(Collections.emptyList());
+		
 		try {
 			
 			List<Token> tokens = AnalisadorLexico.executa(txtIn.getText());
 			preencheTabelaTokens(tokens);
-			txtOut.setText("Analisador Léxico executado com sucesso!");
+			txtOut.setText("Analisador LÃ©xico executado com sucesso!");
 
 			AnalisadorSintatico.executa(tokens);
-			txtOutSintatico.setText("Analisador Sintático executado com sucesso!");
+			txtOutSintatico.setText("Analisador SintÃ¡tico executado com sucesso!");
 			
 		} catch (LexicoException e) {
 			txtOut.setText(e.toString());
@@ -72,7 +76,7 @@ public class PrincipalController implements Initializable {
 		}
 
 		/**
-		 * Executa com o analisador padrão do gals, somente para via de comparação
+		 * Executa com o analisador padrï¿½o do gals, somente para via de comparaï¿½ï¿½o
 		 */
 		try {
 			new AnalisadorSintaticoDefault().parse(new AnalisadorLexico(txtIn.getText()));

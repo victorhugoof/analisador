@@ -10,18 +10,27 @@ import java.util.Stack;
 
 public class AnalisadorSintatico implements Funcoes {
 
-	private Stack<Integer> fila;
+	private Stack<Integer> fila; 
 	private List<Token> tokens;
 	private Token tokenAtual;
 	private Token tokenAnterior;
 
 	public static void executa(List<Token> tokens) throws SintaticoException {
-		new AnalisadorSintatico(tokens).processaTokens();
-	}
-
+		try {
+			new AnalisadorSintatico(tokens).processaTokens();
+		} catch (SintaticoException se) {
+			throw se;
+		} catch (Exception e) {
+			throw new SintaticoException("Erro inesperado: " + e.getMessage());
+		}
+	} 
+ 
 	private AnalisadorSintatico(List<Token> tokens) {
+		
 		this.tokens = tokens;
+		
 		this.fila = new Stack<>();
+		
 	}
 
 	/**
@@ -33,8 +42,8 @@ public class AnalisadorSintatico implements Funcoes {
 		/**
 		 * Adiciona tokens iniciais na fila
 		 */
-		addFila(DOLLAR);
-		addFila(START_SYMBOL);
+		addFila(DOLLAR); // 1
+		addFila(START_SYMBOL); // 46
 
 		/**
 		 * Inicia o processo buscando o primeiro token da lista.
@@ -44,11 +53,12 @@ public class AnalisadorSintatico implements Funcoes {
 		/**
 		 * Enquanto houver token na lista continuará processando
 		 */
+		
 		while (!tokens.isEmpty()) {
 			verificaAdicionaTokenFinalPrograma();
 
 			Integer topo = topoFila();
-
+			
 			/**
 			 * Caso for o EPSILON pula para o próximo token da fila
 			 */
@@ -81,6 +91,8 @@ public class AnalisadorSintatico implements Funcoes {
 
 			/**
 			 * Se a fila estiver vazia significa que já está no ultimo token, não realiza nada.
+			 * 
+			 * Se houver mais token que fila
 			 */
 			if (filaVazia()) {
 				return;
@@ -92,8 +104,8 @@ public class AnalisadorSintatico implements Funcoes {
 			proximoToken();
 
 		} else {
-
-			throw new SintaticoException(PARSER_ERROR[topo], tokenAtual.getPosition());
+			
+			throw new SintaticoException(getMensagemErro(tokenAnterior, tokenAtual) + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
 	}
 
@@ -111,12 +123,17 @@ public class AnalisadorSintatico implements Funcoes {
 			int[] productions = PRODUCTIONS[parse];
 			int size = productions.length;
 
+			/**
+			 * Adiciona as producoes na fila em ordem inversa
+			 */
 			for (int i = size - 1; i >= 0; i--) {
+				
+				//So adiciona se a produção não for vazia/E
 				addFila(productions[i]);
 			}
 
 		} else {
-			throw new SintaticoException(PARSER_ERROR[topo], tokenAtual.getPosition());
+			throw new SintaticoException(getMensagemErro(tokenAnterior, tokenAtual) + " //  "+ PARSER_ERROR[topo], tokenAtual.getPosition());
 		}
 	}
 
@@ -168,7 +185,7 @@ public class AnalisadorSintatico implements Funcoes {
 	 * @return
 	 */
 	private boolean filaVazia() {
-		return this.fila.isEmpty();
+		return this.fila.isEmpty();	
 	}
 
 	/**

@@ -30,9 +30,17 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
         </HBox>
+<<<<<<< HEAD
         <HBox layoutY="34.0" prefHeight="594.0" prefWidth="1200.0">
+=======
+        <HBox layoutY="43.0" prefHeight="594.0" prefWidth="1200.0">
+>>>>>>> refs/heads/masterV
             <children>
+<<<<<<< HEAD
                 <TextArea fx:id="txtIn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="574.0" prefWidth="787.0">
+=======
+                <TextArea fx:id="txtIn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="456.0" prefWidth="432.0">
+>>>>>>> refs/heads/masterV
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
@@ -52,7 +60,11 @@
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>
         </HBox>
+<<<<<<< HEAD
         <VBox layoutY="620.0" prefHeight="89.0" prefWidth="1200.0">
+=======
+        <VBox layoutY="621.0" prefHeight="89.0" prefWidth="1200.0">
+>>>>>>> refs/heads/masterV
             <children>
                 <TextArea fx:id="txtOut" prefHeight="40.0">
                     <VBox.margin>
