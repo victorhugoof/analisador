@@ -1,6 +1,6 @@
 package br.com.unisul.analisador.constants;
 
-public interface Constants extends ScannerConstants, ParserConstants {
+public interface Constants_old extends ScannerConstants_old, ParserConstants_old {
     int EPSILON  = 0; // vazio   - Cadeia Vazia
     int DOLLAR   = 1; // $ fim de sentença
 

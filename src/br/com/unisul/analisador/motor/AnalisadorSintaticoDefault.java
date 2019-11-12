@@ -1,14 +1,13 @@
 package br.com.unisul.analisador.motor;
 
-import br.com.unisul.analisador.constants.Constants;
+import br.com.unisul.analisador.constants.Constants_old;
 import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.LexicoException;
 import br.com.unisul.analisador.exception.SintaticoException;
 
-import java.util.Objects;
 import java.util.Stack;
 
-public class AnalisadorSintaticoDefault implements Constants
+public class AnalisadorSintaticoDefault implements Constants_old
 {
     private Stack stack = new Stack();
     private Token currentToken;
@@ -85,7 +84,7 @@ public class AnalisadorSintaticoDefault implements Constants
         if (p >= 0)
         {
             int[] production = PRODUCTIONS[p];
-            //empilha a produção em ordem reversa
+            //empilha a produï¿½ï¿½o em ordem reversa
             for (int i=production.length-1; i>=0; i--)
             {
                 stack.push(new Integer(production[i]));

@@ -1,6 +1,6 @@
 package br.com.unisul.analisador.constants;
 
-public interface ScannerConstants
+public interface ScannerConstants_old
 {
     int[][] SCANNER_TABLE = 
     {
@@ -43,7 +43,7 @@ public interface ScannerConstants
         {  40, 26, 29, 44, 23, 34, 32, 27, 42, 30, 28, 41, 45, 39, 25, 22, 37, 35, 31, 43, 36, 24, 33, 38 };
 
     String[] SCANNER_ERROR = {
-        "Caractere n„o esperado",
+        "Caractere n√£o esperado",
         "",
         "",
         "",

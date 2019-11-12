@@ -26,11 +26,8 @@ public class AnalisadorSintatico implements Funcoes {
 	} 
  
 	private AnalisadorSintatico(List<Token> tokens) {
-		
 		this.tokens = tokens;
-		
 		this.fila = new Stack<>();
-		
 	}
 
 	/**
@@ -73,8 +70,11 @@ public class AnalisadorSintatico implements Funcoes {
 				processaTokenNaoTerminal(topo);
 				continue;
 
+			} else {
+				AnalisadorSemantico.executeAction(getFuncaoSemantica(topo), tokenAnterior);
 			}
-		};
+		}
+		System.out.println(AnalisadorSemantico.getIntermediateCode());
 	}
 
 	private void processaTokenTerminal(Integer topo) throws SintaticoException {

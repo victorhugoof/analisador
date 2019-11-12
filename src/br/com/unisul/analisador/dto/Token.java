@@ -26,12 +26,20 @@ public class Token {
 		return position;
 	}
 
-	public String getDescricao() {
+	public final String getDescricao() {
 		return descricao;
 	}
 
-	public String toString() {
+	public final String toString() {
 		return id + " ( '" + token + "' ) - " + descricao + " @ " + position;
+	}
+
+	public final String getName() {
+		return getToken();
+	}
+
+	public final Integer getValue(){
+		return Integer.parseInt(getName());
 	}
 
 }

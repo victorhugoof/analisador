@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import br.com.unisul.analisador.dto.Token;
 
-public interface Funcoes extends Constants {
+public interface Funcoes extends Constants_old {
 
 	default boolean isTerminal(int token) {
 		return token < FIRST_NON_TERMINAL;
@@ -14,8 +14,12 @@ public interface Funcoes extends Constants {
 		return token >= FIRST_NON_TERMINAL && token < FIRST_SEMANTIC_ACTION;
 	}
 
+	default int getFuncaoSemantica(int token) {
+		return token - FIRST_SEMANTIC_ACTION;
+	}
+
 	/**
-	 * M�todo que busca descri��o de um token terminal
+	 * Método que busca descrição de um token terminal
 	 * @return
 	 */
 	default String getDescricaoTerminal(String key) {
@@ -88,7 +92,7 @@ enum EnumTerminais {
 		return null;
 	}
 
-	private EnumTerminais(String key, String descricao) {
+	EnumTerminais(String key, String descricao) {
 		this.key = key;
 		this.descricao = descricao;
 	}

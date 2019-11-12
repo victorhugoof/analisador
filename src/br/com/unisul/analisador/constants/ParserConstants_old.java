@@ -1,6 +1,6 @@
 package br.com.unisul.analisador.constants;
 
-public interface ParserConstants {
+public interface ParserConstants_old {
     int START_SYMBOL = 46;
 
     int FIRST_NON_TERMINAL    = 46;
