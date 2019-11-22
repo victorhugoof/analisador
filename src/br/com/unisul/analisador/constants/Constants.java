@@ -1,9 +1,9 @@
 package br.com.unisul.analisador.constants;
 
-public interface Constants extends ScannerConstants, ParserConstants
-{
-    int EPSILON  = 0;
-    int DOLLAR   = 1;
+public interface Constants extends ScannerConstants, ParserConstants {
+
+    int EPSILON = 0;
+    int DOLLAR = 1;
 
     int t_TOKEN_2 = 2; //"+"
     int t_TOKEN_3 = 3; //"-"

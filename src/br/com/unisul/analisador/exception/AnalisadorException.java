@@ -3,20 +3,21 @@ package br.com.unisul.analisador.exception;
 import java.util.Objects;
 
 public abstract class AnalisadorException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
-	
-	private int position;
 
-    public AnalisadorException(String msg, int position) {
+    private static final long serialVersionUID = 1L;
+
+    private int position;
+
+    AnalisadorException(String msg, int position) {
         super(msg);
         this.position = position;
     }
 
-    public AnalisadorException(String msg) {
+    AnalisadorException(String msg) {
         super(msg);
     }
 
-    public AnalisadorException(Throwable throwable) {
+    AnalisadorException(Throwable throwable) {
         super(throwable);
     }
 

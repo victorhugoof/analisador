@@ -1,51 +1,51 @@
 package br.com.unisul.analisador.motor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import br.com.unisul.analisador.constants.Funcoes;
 import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.LexicoException;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class AnalisadorLexico implements Funcoes {
 
     private int posicaoAtual;
-    private String entrada;
+    private final String entrada;
 
-    public static List<Token> executa(String input) throws LexicoException {
-    	try {
-	        List<Token> tokens = new ArrayList<>();
-	        AnalisadorLexico lexico = new AnalisadorLexico(input);
-	
-	        Token token = lexico.proximoToken();
-	
-	        while (Objects.nonNull(token)) {
-	            tokens.add(token);
-	            token = lexico.proximoToken();
-	        }
-	        
-	        /**
-	         * Adiciona ultimo token nulo para identificar fina
-	         */ 
-	        tokens.add(lexico.proximoToken());
-	
-	        return tokens;
-    	} catch (LexicoException lx) {
-    	    lx.printStackTrace();
-    		throw lx;
-    	} catch (Exception e) {
-    	    e.printStackTrace();
-    		throw new LexicoException("Erro inesperado: " + e.getMessage());
-    	}
-    }
-
-    public AnalisadorLexico(String input) {
+    private AnalisadorLexico(String input) {
         this.entrada = input;
         this.posicaoAtual = 0;
     }
 
-    public Token proximoToken() throws LexicoException {
+    public static List<Token> executa(String input) throws LexicoException {
+        try {
+            List<Token> tokens = new ArrayList<>();
+            AnalisadorLexico lexico = new AnalisadorLexico(input);
+
+            Token token = lexico.proximoToken();
+
+            while (Objects.nonNull(token)) {
+                tokens.add(token);
+                token = lexico.proximoToken();
+            }
+
+            /**
+             * Adiciona ultimo token nulo para identificar fina
+             */
+            tokens.add(lexico.proximoToken());
+
+            return tokens;
+        } catch (LexicoException lx) {
+            lx.printStackTrace();
+            throw lx;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LexicoException("Erro inesperado: " + e.getMessage());
+        }
+    }
+
+    private Token proximoToken() throws LexicoException {
 
         if (!possuiChar()) {
             return null;
@@ -101,17 +101,18 @@ public class AnalisadorLexico implements Funcoes {
 
     /**
      * Método responsável por buscar o proximo estado do char
+     *
      * @param c
      * @param state
      * @return
      */
     private int proximoEstado(char c, int state) {
-        int next = SCANNER_TABLE[state][c];
-        return next;
+        return SCANNER_TABLE[state][c];
     }
 
     /**
      * Método responsável por buscar o token de um estado
+     *
      * @param state
      * @return
      */
@@ -125,17 +126,18 @@ public class AnalisadorLexico implements Funcoes {
 
     /**
      * Busca o valor de um token
+     *
      * @param base
      * @param key
      * @return 0-> token
-     *         1-> descricao
+     * 1-> descricao
      */
-    public Object[] buscarToken(int base, String key) {
+    private Object[] buscarToken(int base, String key) {
         int start = SPECIAL_CASES_INDEXES[base];
-        int end   = SPECIAL_CASES_INDEXES[base+1]-1;
+        int end = SPECIAL_CASES_INDEXES[base + 1] - 1;
 
         while (start <= end) {
-            int half = (start+end)/2;
+            int half = (start + end) / 2;
             String special = SPECIAL_CASES_KEYS[half];
             int comp = special.compareToIgnoreCase(key);
 
@@ -153,6 +155,7 @@ public class AnalisadorLexico implements Funcoes {
 
     /**
      * Verifica se possui o char na entrada
+     *
      * @return
      */
     private boolean possuiChar() {
@@ -161,6 +164,7 @@ public class AnalisadorLexico implements Funcoes {
 
     /**
      * Busca o proximo char da entrada
+     *
      * @return
      */
     private char proximoChar() {

@@ -12,8 +12,7 @@ import java.util.Optional;
 
 public class SemanticoUtils {
 
-
-    public static Object executeAnalisadorSemantico(int idMethod, Token tokenAnterior) throws SemanticoException {
+    public static void executeAnalisadorSemantico(int idMethod, Token tokenAnterior) throws SemanticoException {
         try {
             Object retorno = Arrays.stream(AnalisadorSemantico.class.getDeclaredMethods())
                     .filter(method -> Optional.ofNullable(method.getDeclaredAnnotation(FuncaoSemantica.class)).map(annotation -> annotation.value() == idMethod).orElse(false))
@@ -22,13 +21,10 @@ public class SemanticoUtils {
                     .orElseThrow(() -> new SemanticoException("Erro inesperado"));
 
             if (retorno instanceof SemanticoException) {
-                SemanticoException ex = (SemanticoException) retorno;
-                throw ex;
+                throw (SemanticoException) retorno;
             } else if (retorno instanceof Exception) {
-                Exception ex = (Exception) retorno;
-                throw new SemanticoException(ex);
+                throw new SemanticoException((Exception) retorno);
             }
-            return retorno;
         } catch (SemanticoException se) {
             if (se.getCause() != null) {
                 se.getCause().printStackTrace();

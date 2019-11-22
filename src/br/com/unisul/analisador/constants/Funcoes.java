@@ -1,10 +1,52 @@
 package br.com.unisul.analisador.constants;
 
+import br.com.unisul.analisador.dto.Token;
+
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Objects;
 
-import br.com.unisul.analisador.dto.Token;
+enum EnumTerminais {
+
+    SINAL_MAIS("+", "Sinal de Adição"),
+    SINAL_MENOS("-", "Sinal de Subtração"),
+    SINAL_MULTIPLICACAO("*", "Sinal de Multiplicação"),
+    SINAL_DIVISAO("/", "Sinal de Divisão"),
+    ABRE_PARENTESES(")", "Abre Parenteses"),
+    FECHA_PARENTESES(")", "Fecha Parenteses"),
+    DOIS_PONTOS_IGUAL(":=", "Dois Pontos Igual"),
+    DOIS_PONTOS(":", "Dois Pontos"),
+    IGUAL("=", "Sinal de Igual"),
+    MAIOR(">", "Sinal de Maior"),
+    MENOR("<", "Sinal de Menor"),
+    MENOR_IGUAL("<=", "Sinal de Menor ou Igual"),
+    MAIOR_IGUAL(">=", "Sinal de Maior ou Igual"),
+    DIFERENTE("<>", "Sinal de Diferente"),
+    VIRGULA(",", "Virgula"),
+    PONTO_VIRGULA(";", "Ponto e Virgula"),
+    PONTO(".", "Ponto");
+
+    private final String key;
+    private final String descricao;
+
+    EnumTerminais(String key, String descricao) {
+        this.key = key;
+        this.descricao = descricao;
+    }
+
+    public static EnumTerminais getByKey(String key) {
+        for (EnumTerminais enun : EnumTerminais.values()) {
+            if (key.equalsIgnoreCase(enun.key)) {
+                return enun;
+            }
+        }
+
+        return null;
+    }
+
+    public String getDescricao() {
+        return this.descricao + " [ " + this.key + " ]";
+    }
+}
 
 public interface Funcoes extends Constants {
 
@@ -48,7 +90,7 @@ public interface Funcoes extends Constants {
         return "TERMINAL";
     }
 
-    default String getTokenName(int token)  {
+    default String getTokenName(int token) {
         try {
             for (Field declaredField : Constants.class.getDeclaredFields()) {
                 int value = (int) declaredField.get(null);
@@ -83,48 +125,5 @@ public interface Funcoes extends Constants {
         }
 
         return texto;
-    }
-}
-
-enum EnumTerminais {
-
-    SINAL_MAIS("+", "Sinal de Adição"),
-    SINAL_MENOS("-", "Sinal de Subtração"),
-    SINAL_MULTIPLICACAO("*", "Sinal de Multiplicação"),
-    SINAL_DIVISAO("/", "Sinal de Divisão"),
-    ABRE_PARENTESES(")", "Abre Parenteses"),
-    FECHA_PARENTESES(")", "Fecha Parenteses"),
-    DOIS_PONTOS_IGUAL(":=", "Dois Pontos Igual"),
-    DOIS_PONTOS(":", "Dois Pontos"),
-    IGUAL("=", "Sinal de Igual"),
-    MAIOR(">", "Sinal de Maior"),
-    MENOR("<", "Sinal de Menor"),
-    MENOR_IGUAL("<=", "Sinal de Menor ou Igual"),
-    MAIOR_IGUAL(">=", "Sinal de Maior ou Igual"),
-    DIFERENTE("<>", "Sinal de Diferente"),
-    VIRGULA(",", "Virgula"),
-    PONTO_VIRGULA(";", "Ponto e Virgula"),
-    PONTO(".", "Ponto");
-
-    private String key;
-    private String descricao;
-
-    public static EnumTerminais getByKey(String key) {
-        for (EnumTerminais enun : EnumTerminais.values()) {
-            if (key.equalsIgnoreCase(enun.key)) {
-                return enun;
-            }
-        }
-
-        return null;
-    }
-
-    EnumTerminais(String key, String descricao) {
-        this.key = key;
-        this.descricao = descricao;
-    }
-
-    public String getDescricao() {
-        return this.descricao + " [ " + this.key + " ]";
     }
 }
