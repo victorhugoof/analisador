@@ -19,6 +19,7 @@ public class AnalisadorSintatico implements Funcoes {
 		try {
 			new AnalisadorSintatico(tokens).processaTokens();
 		} catch (SintaticoException se) {
+			se.printStackTrace();
 			throw se;
 		} catch (Exception e) {
 			throw new SintaticoException("Erro inesperado: " + e.getMessage());
@@ -67,6 +68,12 @@ public class AnalisadorSintatico implements Funcoes {
 				continue;
 
 			} else if (nonTerminal(topo)) {
+				/**
+				 * Passa para o semantico o nome da call
+				 */
+				if ("call".equals(tokenAtual.getName())) {
+					AnalisadorSemantico.setCall(this.tokens.get(1).getName());
+				}
 				processaTokenNaoTerminal(topo);
 				continue;
 

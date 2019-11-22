@@ -51,7 +51,40 @@ public class PrincipalController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		codigo.setCellValueFactory(new PropertyValueFactory<>("id"));
 		token.setCellValueFactory(new PropertyValueFactory<>("token"));
-		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));	
+		descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
+
+		txtIn.setText("Program ProgramaTrabalho3;\n" +
+				"\tConst maxNums = 5;\n" +
+				"\tVar x,res,cont,soma: Integer;\n" +
+				"\n" +
+				"\tProcedure calcula(y: integer);\n" +
+				"\t\tvar divisor : integer;\n" +
+				"\n" +
+				"\t\tProcedure divide(a,b: integer);\n" +
+				"\t\tbegin\n" +
+				"\t\t\tres := a / b;\n" +
+				"\t\tend;\n" +
+				"\n" +
+				"\tbegin\n" +
+				"\t\twriteln(\"Informe o valor do divisor:\" );\n" +
+				"\t\tReadln(divisor);\n" +
+				"\t\tcall divide(y,divisor);\n" +
+				"\tend;\n" +
+				"\n" +
+				"Begin\n" +
+				"\tWriteln(\"Iniciando programa...\");\n" +
+				"\tWriteln(\"Informe o valor do dividendo: \");\n" +
+				"\tReadln(x);\n" +
+				"\tsoma := 0;\n" +
+				"\n" +
+				"\tfor cont := 1 to maxNums do begin\n" +
+				"\t\tcont := cont + 1;\n" +
+				"\t\tcall calcula(x);\n" +
+				"\t\tWriteln(\"Resultado do calculo: \", res);\n" +
+				"\t\tsoma := soma + res;\n" +
+				"\tend;\n" +
+				"\tWriteln(\"Resultado da soma dos calculos: \", soma);\n" +
+				"End.");
 	}
 
 	@FXML
@@ -76,10 +109,10 @@ public class PrincipalController implements Initializable {
 		}
 
 		/**
-		 * Executa com o analisador padr�o do gals, somente para via de compara��o
+		 * Executa com o analisador padrão do gals, somente para via de comparação
 		 */
 		try {
-			new AnalisadorSintaticoDefault().parse(new AnalisadorLexico(txtIn.getText()));
+//			new AnalisadorSintaticoDefault().parse(new AnalisadorLexico(txtIn.getText()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

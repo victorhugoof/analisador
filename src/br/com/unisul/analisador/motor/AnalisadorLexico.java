@@ -32,8 +32,10 @@ public class AnalisadorLexico implements Funcoes {
 	
 	        return tokens;
     	} catch (LexicoException lx) {
+    	    lx.printStackTrace();
     		throw lx;
     	} catch (Exception e) {
+    	    e.printStackTrace();
     		throw new LexicoException("Erro inesperado: " + e.getMessage());
     	}
     }
@@ -58,7 +60,14 @@ public class AnalisadorLexico implements Funcoes {
 
         while (possuiChar()) {
             ultimoEstado = estado;
-            estado = proximoEstado(proximoChar(), estado);
+            if (fim > 0) {
+                System.out.println();
+            }
+            try {
+                estado = proximoEstado(proximoChar(), estado);
+            } catch (Exception e) {
+                throw new LexicoException("Erro inesperado no token: " + this.entrada.substring(start, fim), posicaoAtual);
+            }
 
             if (estado < 0) {
                 break;
@@ -71,6 +80,7 @@ public class AnalisadorLexico implements Funcoes {
         }
 
         if (estadoFinal < 0 || (estadoFinal != estado && tokenPorEstado(ultimoEstado) == -2)) {
+            System.out.println(entrada.substring(posicaoAtual - 10, posicaoAtual));
             throw new LexicoException(SCANNER_ERROR[ultimoEstado], start);
         }
 
@@ -90,7 +100,7 @@ public class AnalisadorLexico implements Funcoes {
     }
 
     /**
-     * M�todo respons�vel por buscar o proximo estado do char
+     * Método responsável por buscar o proximo estado do char
      * @param c
      * @param state
      * @return
@@ -101,7 +111,7 @@ public class AnalisadorLexico implements Funcoes {
     }
 
     /**
-     * M�todo respons�vel por buscar o token de um estado
+     * Método responsável por buscar o token de um estado
      * @param state
      * @return
      */
@@ -138,7 +148,7 @@ public class AnalisadorLexico implements Funcoes {
             }
         }
 
-        return new Object[]{base, isTerminal(base) ? getDescricaoTerminal(key) : (nonTerminal(base) ? "N�O TERMINAL" : "SEMANTICO")};
+        return new Object[]{base, isTerminal(base) ? getDescricaoTerminal(key, base) : (nonTerminal(base) ? "NÃO TERMINAL" : "SEMANTICO")};
     }
 
     /**

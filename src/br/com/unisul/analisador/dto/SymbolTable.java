@@ -1,308 +1,231 @@
 package br.com.unisul.analisador.dto;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class SymbolTable {
 
-	private ArrayList<Symbol> table;
-	private Integer tableSize;
-	private Boolean error;
+    private List<Symbol> table;
+    private Integer tableSize;
+    private Boolean error;
 
-	public SymbolTable(Integer elements) {
-		this.table = new ArrayList<Symbol>();
-		this.tableSize = elements;
-		this.error = false;
-		this.initialize();
-	}
+    public SymbolTable(Integer elements) {
+        this.table = new ArrayList<>();
+        this.tableSize = elements;
+        this.error = false;
+        this.initialize();
+    }
 
-	public void initialize() {
-		for (int i = 0; i < this.tableSize; i++) {
-			this.table.add(new Symbol());
-		}
-	}
+    public void initialize() {
+        for (int i = 0; i < this.tableSize; i++) {
+            this.table.add(new Symbol());
+        }
+        
+    }
 
-	public void insert(Symbol s) {
+    public void insert(Symbol s) {
 
-		Integer index = this.hashFunction(s);
-		Symbol tmp = new Symbol();
+        Integer index = this.hashFunction(s);
+        Symbol tmp = new Symbol();
 
-		tmp = this.table.get(index);
+        tmp = this.table.get(index);
 
-		if (this.isFirst(tmp)) {
+        if (this.isFirst(tmp)) {
 
-			s.setNext(new Symbol());
-			s.getNext().setPrevious(s);
+            s.setNext(new Symbol());
+            s.getNext().setPrevious(s);
 
-			this.table.set(index, s);
-			// System.out.println("> Inserindo na tabela de símbolos: \"" + s.getName() + "\" Level " + s.getLevel());
+            this.table.set(index, s);
+//             System.out.println("> Inserindo na tabela de símbolos: \"" + s.getName() + "\" Level " + s.getLevel());
 
-		} else {
+        } else {
 
-			while (tmp.getName() != null) {
+            while (tmp.getName() != null) {
 
-				if (this.isValid(tmp, s)) {
-					tmp.getNext().setPrevious(tmp);
-					tmp = tmp.getNext();
+                if (this.isValid(tmp, s)) {
+                    tmp.getNext().setPrevious(tmp);
+                    tmp = tmp.getNext();
 
-				} else {
-					break;
-				}
-			}
+                } else {
+                    break;
+                }
+            }
 
-			if (!this.error) {
+            if (!this.error) {
 
-				s.setPrevious(tmp.getPrevious());
-				tmp.getPrevious().setNext(s);
-				s.setNext(new Symbol());
+                s.setPrevious(tmp.getPrevious());
+                tmp.getPrevious().setNext(s);
+                s.setNext(new Symbol());
 
-				// System.out.println("> Inserindo na tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
-			}
-		}
+//                 System.out.println("> Inserindo na tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
+            }
+        }
 
-		this.error = false;
-	}
+        this.error = false;
+		
+    }
 
-	public void delete(Symbol s) {
-
-		Integer index = this.hashFunction(s);
-		Symbol tmp = this.table.get(index);
-
-		if (tmp.getNext().getName() == null) {
-
-			if (this.isEquals(s, tmp)) {
-
-				this.table.set(index.intValue(), new Symbol());
-				// System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
-			}
-
-		} else if (tmp.getPrevious() != null) {
-
-			while (tmp.getName() != null) {
-
-				if (this.isEquals(s, tmp)) {
-
-					tmp.getPrevious().setNext(tmp.getNext());
-					// System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
-
-					break;
-
-				} else {
-					tmp.getNext().setPrevious(tmp);
-					tmp = tmp.getNext();
-				}
-			}
-
-		} else {
-
-			this.table.set(index, tmp.getNext());
-			// System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
-
-		}
-	}
-
-	public void update(Symbol s, Symbol old) {
-
-		Integer index = this.hashFunction(old);
-		Symbol tmp = this.table.get(index);
-
-		while (tmp.getName() != null) {
-
-			if (tmp.equals(old)) {
-
-				this.delete(old);
-				this.insert(s);
-
-				break;
-
-			} else {
-
-				tmp.getNext().setPrevious(tmp);
-				tmp = tmp.getNext();
-
-			}
-		}
-	}
-
-	public Symbol search(String search) {
-		return search(search, null);
-	}
-
-	public Symbol search(String search, Integer level) {
-
-		Symbol s = new Symbol(search);
-		Integer index = this.hashFunction(s);
-
-		s = this.table.get(index);
-
-		if (isNotNull(search, s) && isSameLevel(level, s)) {
-
-			if (s.getName().equals(search)) {
-
-				// this.printSymbol(s);
-				s.setIndex(index);
-				return s;
-
-			} else {
-
-				while (s.getName() != null) {
-
-					s = s.getNext();
-
-					if (s.getName() != null && s.getName().equals(search)) {
-						// this.printSymbol(s);
-						s.setIndex(index);
-						return s;
-					}
-				}
-			}
+    public void delete(Symbol s) {
+    	
+    	if (s.getName().equals("divide")) {
+    		print();
+    		System.out.println("divide");
 		}
 
-		// System.err.println("Elemento \"" + search + "\" não encontrado! \n");
+        Integer index = this.hashFunction(s);
+        Symbol tmp = this.table.get(index);
 
-		return null;
-	}
+        if (tmp.getNext().getName() == null) {
 
-	private boolean isNotNull(String search, Symbol s) {
-		return (Objects.nonNull(search) && Objects.nonNull(s.getName()));
-	}
+            if (this.isEquals(s, tmp)) {
 
-	private boolean isSameLevel(Integer level, Symbol s) {
-		return Objects.isNull(level) || s.getLevel().compareTo(level) == 0;
-	}
+                this.table.set(index.intValue(), new Symbol());
+                 System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
+            }
 
-	private int hashFunction(Symbol s) {
+        } else if (tmp.getPrevious() != null) {
 
-		int hashValue = 0;
+            while (tmp.getName() != null) {
 
-		for (int i = 0; i < s.getName().length(); i++) {
-			hashValue = 37 * hashValue + s.getName().charAt(i);
-		}
+                if (this.isEquals(s, tmp)) {
 
-		hashValue %= this.tableSize;
+                    tmp.getPrevious().setNext(tmp.getNext());
+                     System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
 
-		if (hashValue < 0)
-			hashValue += this.tableSize;
+                    break;
 
-		return hashValue;
+                } else {
+                    tmp.getNext().setPrevious(tmp);
+                    tmp = tmp.getNext();
+                }
+            }
 
-	}
+        } else {
 
-	private Boolean isValid(Symbol s1, Symbol s2) {
-
-		if (s1.getName().equals(s2.getName())) {
-
-			if (s1.getLevel() == s2.getLevel()) {
-				// System.err.println("Símbolo com mesmo nome e nível já existente! \n");
-				this.error = true;
-				return false;
-
-			} else {
-				return true;
+        	if (tmp.getName().equals(s.getName())) {
+				this.table.set(index, tmp.getNext());
+				System.out.println("> Removendo da tabela de símbolos: " + s.getName() + " Level " + s.getLevel());
 			}
 
-		} else {
-			return true;
-		}
-	}
+        }
+		
+    }
 
-	private Boolean isFirst(Symbol s) {
+    public Symbol search(String search) {
+		
+        return search(search, null);
+    }
 
-		if (s.getNext() != null)
-			return false;
-		else
-			return true;
-	}
+    public Symbol search(String search, Integer level) {
+		
 
-	private Boolean isEquals(Symbol s1, Symbol s2) {
+        Symbol s = new Symbol(search);
+        Integer index = this.hashFunction(s);
 
-		if (s1.getName().equals(s2.getName())) {
+        s = this.table.get(index);
 
-			if (s1.getLevel() == s2.getLevel()) {
-				return true;
+        if (isNotNull(search, s) && isSameLevel(level, s)) {
 
-			} else {
-				return false;
-			}
+            if (s.getName().equals(search)) {
 
-		} else {
-			return false;
-		}
-	}
+                // this.printSymbol(s);
+                s.setIndex(index);
+                return s;
 
-	public Symbol clone(Symbol s) {
+            } else {
 
-		Symbol tmp = new Symbol();
+                while (s.getName() != null) {
 
-		tmp.setName(s.getName());
-		tmp.setLevel(s.getLevel());
-		tmp.setCategory(s.getCategory());
-		tmp.setGeneralA(s.getGeneralA());
-		tmp.setGeneralB(s.getGeneralB());
-		tmp.setNext(s.getNext());
-		tmp.setPrevious(s.getPrevious());
+                    s = s.getNext();
 
-		return tmp;
-	}
+                    if (s.getName() != null && s.getName().equals(search)) {
+                        // this.printSymbol(s);
+                        s.setIndex(index);
+                        return s;
+                    }
+                }
+            }
+        }
 
-	public void print() {
+        // System.err.println("Elemento \"" + search + "\" não encontrado! \n");
 
-		String msg = "\n";
-		Symbol aux;
+        return null;
+    }
 
-		for (int i = 0; i < this.table.size(); i++) {
+    private boolean isNotNull(String search, Symbol s) {
+        return (Objects.nonNull(search) && Objects.nonNull(s.getName()));
+    }
 
-			aux = this.table.get(i);
-			msg += i + " - ";
+    private boolean isSameLevel(Integer level, Symbol s) {
+        return Objects.isNull(level) || s.getLevel().compareTo(level) == 0;
+    }
 
-			if (aux != null) {
+    private int hashFunction(Symbol s) {
 
-				while (aux.getNext() != null) {
+        int hashValue = 0;
 
-					msg += aux.getName() + " Level " + aux.getLevel() + " > ";
-					aux = aux.getNext();
-				}
-			}
-			msg += "\n";
-		}
+        for (int i = 0; i < s.getName().length(); i++) {
+            hashValue = 37 * hashValue + s.getName().charAt(i);
+        }
 
-		System.out.println(msg);
-	}
+        hashValue %= this.tableSize;
 
-	// private void printSymbol(Symbol s) {
+        if (hashValue < 0)
+            hashValue += this.tableSize;
 
-	// 	System.out.println("Name: " + s.getName());
-	// 	System.out.println("Category: " + s.getCategory());
-	// 	System.out.println("General A: " + s.getGeneralA());
-	// 	System.out.println("General B: " + s.getGeneralB());
-	// 	System.out.println("Level: " + s.getLevel());
-	// 	System.out.println("Next " + s.getNext().getName());
-	// 	System.out.println("Previous: " + s.getPrevious().getName());
-	// 	System.out.println();
+        return hashValue;
 
-	// }
+    }
 
-	public ArrayList<Symbol> getTable() {
-		return table;
-	}
+    private Boolean isValid(Symbol s1, Symbol s2) {
 
-	public void setTable(ArrayList<Symbol> table) {
-		this.table = table;
-	}
+        if (s1.getName().equals(s2.getName())) {
 
-	public Integer getTableSize() {
-		return tableSize;
-	}
+            if (s1.getLevel() == s2.getLevel()) {
+                // System.err.println("Símbolo com mesmo nome e nível já existente! \n");
+                this.error = true;
+                return false;
 
-	public void setTableSize(Integer tableSize) {
-		this.tableSize = tableSize;
-	}
+            } else {
+                return true;
+            }
 
-	public Boolean getError() {
-		return error;
-	}
+        } else {
+            return true;
+        }
+    }
 
-	public void setError(Boolean error) {
-		this.error = error;
+    private Boolean isFirst(Symbol s) {
+
+        if (s.getNext() != null)
+            return false;
+        else
+            return true;
+    }
+
+    private Boolean isEquals(Symbol s1, Symbol s2) {
+
+        if (s1.getName().equals(s2.getName())) {
+
+            if (s1.getLevel() == s2.getLevel()) {
+                return true;
+
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
+    public List<Symbol> getTable() {
+        return table;
+    }
+
+    public void print() {
+    	System.out.println(table.stream().map(i -> i.getName()).collect(Collectors.joining(",")));
 	}
 }

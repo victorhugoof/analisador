@@ -5,6 +5,7 @@ import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.SemanticoException;
 import br.com.unisul.analisador.motor.AnalisadorSemantico;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
@@ -13,17 +14,32 @@ public class SemanticoUtils {
 
 
     public static Object executeAnalisadorSemantico(int idMethod, Token tokenAnterior) throws SemanticoException {
-        Object retorno = Arrays.stream(AnalisadorSemantico.class.getDeclaredMethods())
-                .filter(method -> Optional.ofNullable(method.getDeclaredAnnotation(FuncaoSemantica.class)).map(annotation -> annotation.value() == idMethod).orElse(false))
-                .findFirst()
-                .map(method -> invokeMethodSemantico(method, tokenAnterior))
-                .orElseThrow(() -> new RuntimeException());
+        try {
+            Object retorno = Arrays.stream(AnalisadorSemantico.class.getDeclaredMethods())
+                    .filter(method -> Optional.ofNullable(method.getDeclaredAnnotation(FuncaoSemantica.class)).map(annotation -> annotation.value() == idMethod).orElse(false))
+                    .findFirst()
+                    .map(method -> invokeMethodSemantico(method, tokenAnterior))
+                    .orElseThrow(() -> new SemanticoException("Erro inesperado"));
 
-        if (retorno instanceof Exception) {
-            Exception ex = (Exception) retorno;
-            throw new SemanticoException(ex);
+            if (retorno instanceof SemanticoException) {
+                SemanticoException ex = (SemanticoException) retorno;
+                throw ex;
+            } else if (retorno instanceof Exception) {
+                Exception ex = (Exception) retorno;
+                throw new SemanticoException(ex);
+            }
+            return retorno;
+        } catch (SemanticoException se) {
+            if (se.getCause() != null) {
+                se.getCause().printStackTrace();
+            } else {
+                se.printStackTrace();
+            }
+            throw se;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new SemanticoException(e);
         }
-        return retorno;
     }
 
     private static Object invokeMethodSemantico(Method method, Token tokenAnterior) {
@@ -32,7 +48,15 @@ public class SemanticoUtils {
             System.out.println("Executando ação semantica....: #" + anotacao.value());
 
             AnalisadorSemantico.setToken(tokenAnterior);
-            return method.invoke(null);
+
+            Object retorno = method.invoke(null);
+            if (retorno == null) {
+                return 0;
+            } else {
+                return retorno;
+            }
+        } catch (InvocationTargetException iv) {
+            return iv.getCause();
         } catch (Exception e) {
             return e;
         }
