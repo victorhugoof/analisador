@@ -1,6 +1,6 @@
 package br.com.unisul.analisador.views.main;
 
-import br.com.unisul.analisador.dto.Instruction;
+import br.com.unisul.analisador.dto.Instrucao;
 import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.LexicoException;
 import br.com.unisul.analisador.exception.SintaticoException;
@@ -46,19 +46,19 @@ public class PrincipalController implements Initializable {
     
     
     @FXML
-    private TableView<Instruction> tblIntermediaria;
+    private TableView<Instrucao> tblIntermediaria;
     
     @FXML
-    private TableColumn<Instruction, Integer> index;
+    private TableColumn<Instrucao, Integer> index;
 
     @FXML
-    private TableColumn<Instruction, String> nome;
+    private TableColumn<Instrucao, String> nome;
 
     @FXML
-    private TableColumn<Instruction, String> operador1;
+    private TableColumn<Instrucao, String> operador1;
     
     @FXML
-    private TableColumn<Instruction, String> operador2;
+    private TableColumn<Instrucao, String> operador2;
 
 
     @FXML
@@ -73,10 +73,10 @@ public class PrincipalController implements Initializable {
         token.setCellValueFactory(new PropertyValueFactory<>("token"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
-        index.setCellValueFactory(new PropertyValueFactory<>("index"));
-        nome.setCellValueFactory(new PropertyValueFactory<>("name"));
-        operador1.setCellValueFactory(new PropertyValueFactory<>("operator1"));
-        operador2.setCellValueFactory(new PropertyValueFactory<>("operator2"));
+        index.setCellValueFactory(new PropertyValueFactory<>("posicao"));
+        nome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        operador1.setCellValueFactory(new PropertyValueFactory<>("operador1"));
+        operador2.setCellValueFactory(new PropertyValueFactory<>("operador2"));
 
         
         txtIn.setText("Program ProgramaTrabalho3;\n" +
@@ -141,15 +141,6 @@ public class PrincipalController implements Initializable {
             txtOutSintatico.setText(ex.toString());
         }
 
-        /**
-         * Executa com o analisador padrão do gals, somente para via de comparação
-         */
-        try {
-//			new AnalisadorSintaticoDefault().parse(new AnalisadorLexico(txtIn.getText()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @FXML
@@ -186,7 +177,7 @@ public class PrincipalController implements Initializable {
     }
     
     private void preencheTabelaIntermediaria() {
-        tblIntermediaria.setItems(FXCollections.observableArrayList(AnalisadorSemantico.getIntermediateCodel()));
+        tblIntermediaria.setItems(FXCollections.observableArrayList(AnalisadorSemantico.getCodigoIntermediario()));
     }
 
 }

@@ -180,6 +180,7 @@ class Hipotetica {
         while (operador != 26) {//Enquanto instrução diferente de PARE
 
             operador = AI.AI[p].codigo;
+            System.out.println(operador);
 
             l = AI.AI[p].op1;
             a = AI.AI[p].op2;

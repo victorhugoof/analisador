@@ -75,6 +75,10 @@ public class AnalisadorSintatico implements Funcoes {
                 if ("call".equals(tokenAtual.getName())) {
                     AnalisadorSemantico.setCall(this.tokens.get(1).getName());
                 }
+
+                if ("procedure".equals(tokenAtual.getName())) {
+                    System.out.println("aq");
+                }
                 processaTokenNaoTerminal(topo);
                 continue;
 
@@ -82,7 +86,6 @@ public class AnalisadorSintatico implements Funcoes {
                 AnalisadorSemantico.executeAction(getFuncaoSemantica(topo), tokenAnterior);
             }
         }
-        System.out.println(AnalisadorSemantico.getIntermediateCode());
     }
 
     private void processaTokenTerminal(Integer topo) throws SintaticoException {
