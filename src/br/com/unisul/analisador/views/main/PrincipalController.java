@@ -1,9 +1,11 @@
 package br.com.unisul.analisador.views.main;
 
+import br.com.unisul.analisador.dto.Instruction;
 import br.com.unisul.analisador.dto.Token;
 import br.com.unisul.analisador.exception.LexicoException;
 import br.com.unisul.analisador.exception.SintaticoException;
 import br.com.unisul.analisador.motor.AnalisadorLexico;
+import br.com.unisul.analisador.motor.AnalisadorSemantico;
 import br.com.unisul.analisador.motor.AnalisadorSintatico;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -30,6 +32,7 @@ public class PrincipalController implements Initializable {
 
     @FXML
     private TableView<Token> tbl;
+    
 
     @FXML
     private TableColumn<Token, Integer> codigo;
@@ -39,6 +42,24 @@ public class PrincipalController implements Initializable {
 
     @FXML
     private TableColumn<Token, String> descricao;
+    
+    
+    
+    @FXML
+    private TableView<Instruction> tblIntermediaria;
+    
+    @FXML
+    private TableColumn<Instruction, Integer> index;
+
+    @FXML
+    private TableColumn<Instruction, String> nome;
+
+    @FXML
+    private TableColumn<Instruction, String> operador1;
+    
+    @FXML
+    private TableColumn<Instruction, String> operador2;
+
 
     @FXML
     private TextArea txtOut;
@@ -52,6 +73,12 @@ public class PrincipalController implements Initializable {
         token.setCellValueFactory(new PropertyValueFactory<>("token"));
         descricao.setCellValueFactory(new PropertyValueFactory<>("descricao"));
 
+        index.setCellValueFactory(new PropertyValueFactory<>("index"));
+        nome.setCellValueFactory(new PropertyValueFactory<>("name"));
+        operador1.setCellValueFactory(new PropertyValueFactory<>("operator1"));
+        operador2.setCellValueFactory(new PropertyValueFactory<>("operator2"));
+
+        
         txtIn.setText("Program ProgramaTrabalho3;\n" +
                 "\tConst maxNums = 5;\n" +
                 "\tVar x,res,cont,soma: Integer;\n" +
@@ -85,6 +112,11 @@ public class PrincipalController implements Initializable {
                 "\tWriteln(\"Resultado da soma dos calculos: \", soma);\n" +
                 "End.");
     }
+    
+    @FXML
+    public void interpretar() {
+    	 AnalisadorSemantico.interpretar();
+    }
 
     @FXML
     public void analizar() {
@@ -100,7 +132,9 @@ public class PrincipalController implements Initializable {
 
             AnalisadorSintatico.executa(tokens);
             txtOutSintatico.setText("Analisador Sintático executado com sucesso!");
-
+            
+            preencheTabelaIntermediaria();
+            
         } catch (LexicoException e) {
             txtOut.setText(e.toString());
         } catch (SintaticoException ex) {
@@ -149,6 +183,10 @@ public class PrincipalController implements Initializable {
 
     private void preencheTabelaTokens(List<Token> tokens) {
         tbl.setItems(FXCollections.observableArrayList(tokens));
+    }
+    
+    private void preencheTabelaIntermediaria() {
+        tblIntermediaria.setItems(FXCollections.observableArrayList(AnalisadorSemantico.getIntermediateCodel()));
     }
 
 }

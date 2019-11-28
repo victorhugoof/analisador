@@ -9,7 +9,7 @@
     <children>
         <HBox layoutY="-9.0" prefHeight="65.0" prefWidth="1200.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#analizar" prefWidth="128.0" text="Executar">
+                <Button mnemonicParsing="false" onAction="#analizar" prefHeight="33.0" prefWidth="71.0" text="Compilar">
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
@@ -17,6 +17,14 @@
                         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                     </padding>
                 </Button>
+            <Button mnemonicParsing="false" onAction="#interpretar" prefHeight="33.0" prefWidth="77.0" text="Interpetrar">
+               <padding>
+                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </Button>
                 <Button mnemonicParsing="false" onAction="#lerArquivo" prefWidth="128.0" text="Abrir..">
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -37,7 +45,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
                 </TextArea>
-                <TableView fx:id="tbl" prefHeight="453.0" prefWidth="550.0">
+                <TableView fx:id="tbl" prefHeight="574.0" prefWidth="452.0">
                     <columns>
                         <TableColumn fx:id="codigo" prefWidth="75.0" text="Código" />
                         <TableColumn fx:id="token" prefWidth="145.0" text="Token" />
@@ -47,6 +55,17 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
                 </TableView>
+            <TableView fx:id="tblIntermediaria" prefHeight="574.0" prefWidth="332.0">
+               <columns>
+                  <TableColumn fx:id="index" prefWidth="52.0" text="Código" />
+                  <TableColumn fx:id="nome" prefWidth="147.0" text="Instancia" />
+                  <TableColumn fx:id="operador1" minWidth="0.0" prefWidth="51.0" text="Arg 1" />
+                  <TableColumn fx:id="operador2" prefWidth="60.0" text="Arg 2" />
+               </columns>
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
+            </TableView>
             </children>
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

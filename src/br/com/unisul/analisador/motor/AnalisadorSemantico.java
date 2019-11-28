@@ -10,10 +10,14 @@ import br.com.unisul.analisador.exception.SemanticoException;
 import br.com.unisul.analisador.util.SemanticoUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class AnalisadorSemantico {
 
@@ -64,6 +68,7 @@ public class AnalisadorSemantico {
 
     public static void executeAction(Integer idCode, Token token) throws SemanticoException {
         SemanticoUtils.executeAnalisadorSemantico(idCode, token);
+        System.out.println(intermediateCode.stream().map(code -> code.toString()).collect(Collectors.joining("\n")));
     }
 
     public static String getIntermediateCode() {
@@ -95,6 +100,23 @@ public class AnalisadorSemantico {
 
         return tmp.toString();
     }
+    
+    public static List<Instruction> getIntermediateCodel() {
+    	
+    	List<Instruction> list = new ArrayList<>();
+
+        for (int i = 0; i < intermediateCode.size(); i++) {
+        	Instruction instruction = new Instruction(i + 1, intermediateCode.get(i).getName(), intermediateCode.get(i).getOperator1(), intermediateCode.get(i).getOperator2());
+        
+        	list.add(instruction);
+        }
+
+        return list;
+    }
+    
+    public static void interpretar() {
+   	 virtualMachine.Interpreta(ia, la);
+   }
 
     @FuncaoSemantica(100)
     public static void inicializacao() {
@@ -242,9 +264,12 @@ public class AnalisadorSemantico {
     public static void f10() {
         Integer p = returnStack(stackParameters);
 
+        
         intermediateCode.add(new Instruction(ia.LC, "RETU", "-", String.valueOf(p)));
         virtualMachine.IncluirAI(ia, 1, 0, p);
-
+        intermediateCode.get(stackProcedure.get(stackProcedure.size() -1) -1).setOperator2(ia.LC + "");
+        Hipotetica.AlterarAI(ia, stackProcedure.get(stackProcedure.size() - 1), 0, ia.LC);
+        
         removeSymbol();
 
         currentLevel--;

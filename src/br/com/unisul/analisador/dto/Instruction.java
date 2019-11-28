@@ -54,4 +54,10 @@ public class Instruction {
     public Integer getOp2() {
         return Integer.parseInt(this.operator2);
     }
+    
+    @Override
+    public String toString() {
+    	
+    	return name + "-" + operator1 + "-" + operator2; 
+    }
 }

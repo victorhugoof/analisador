@@ -104,7 +104,7 @@ class Hipotetica {
             AI.AI[i].op1 = -1;
             AI.AI[i].op2 = -1;
         }
-        AI.LC = 0;
+        AI.LC = 1;
     }
 
     /**
@@ -225,9 +225,10 @@ class Hipotetica {
                 case 8: //DIVI
                     if (S[topo] == 0) {
                         JOptionPane.showMessageDialog(null, "Divisão por zero.", "Erro durante a execução", JOptionPane.ERROR_MESSAGE);
-                        S[topo - 1] = S[topo - 1] / S[topo];
-                        topo = topo - 1;
                     }
+                    S[topo - 1] = S[topo - 1] / S[topo];
+                    topo = topo - 1;
+                    
                     break;
 
                 case 9://INVR
