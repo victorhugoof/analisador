@@ -7,8 +7,8 @@ public class Simbolo {
     private String nome;
     private Categoria categoria;
     private Integer nivel;
-    private Integer generalA;
-    private Integer generalB;
+    private Integer geralA;
+    private Integer geralB;
     private Integer index;
     private Simbolo proximo;
     private Simbolo anterior;
@@ -24,8 +24,8 @@ public class Simbolo {
         this.nome = n;
         this.categoria = c;
         this.nivel = nivel;
-        this.generalA = ga;
-        this.generalB = gb;
+        this.geralA = ga;
+        this.geralB = gb;
     }
 
     public String getNome() {
@@ -40,20 +40,20 @@ public class Simbolo {
         return nivel;
     }
 
-    public Integer getGeneralA() {
-        return generalA;
+    public Integer getGeralA() {
+        return geralA;
     }
 
-    public void setGeneralA(Integer generalA) {
-        this.generalA = generalA;
+    public void setGeralA(Integer geralA) {
+        this.geralA = geralA;
     }
 
-    public Integer getGeneralB() {
-        return generalB;
+    public Integer getGeralB() {
+        return geralB;
     }
 
-    public void setGeneralB(Integer generalB) {
-        this.generalB = generalB;
+    public void setGeralB(Integer geralB) {
+        this.geralB = geralB;
     }
 
     public Integer getIndex() {

@@ -155,9 +155,10 @@ public class AnalisadorSemantico {
             if (simboloExiste(simboloAux)) {
                 throw new SemanticoException("Simbolo ja existe");
             } else {
-                tabelaSimbolos.adiciona(new Simbolo(token.getName(), Categoria.VARIAVEL, nivelAtual, deslocamentoAmem, 0));
-                pilhaSimbolos.add(new Simbolo(token.getName(), Categoria.VARIAVEL, nivelAtual, deslocamentoAmem, 0));
-                pilhaSimbolosAux.add(new Simbolo(token.getName(), Categoria.VARIAVEL, nivelAtual, deslocamentoAmem, 0));
+                simboloAux = new Simbolo(token.getName(), Categoria.VARIAVEL, nivelAtual, deslocamentoAmem, 0);
+                tabelaSimbolos.adiciona(simboloAux);
+                pilhaSimbolos.add(simboloAux);
+                pilhaSimbolosAux.add(simboloAux);
                 deslocamentoAmem++;
                 variaveis++;
             }
@@ -167,9 +168,10 @@ public class AnalisadorSemantico {
             if (simboloExiste(simboloAux)) {
                 throw new SemanticoException("Simbolo ja existe");
             } else {
-                tabelaSimbolos.adiciona(new Simbolo(token.getName(), Categoria.PARAMETRO, nivelAtual, 0, 0));
-                pilhaSimbolos.add(new Simbolo(token.getName(), Categoria.PARAMETRO, nivelAtual, 0, 0));
-                pilhaSimbolosAux.add(new Simbolo(token.getName(), Categoria.PARAMETRO, nivelAtual, 0, 0));
+                simboloAux = new Simbolo(token.getName(), Categoria.PARAMETRO, nivelAtual, 0, 0);
+                tabelaSimbolos.adiciona(simboloAux);
+                pilhaSimbolos.add(simboloAux);
+                pilhaSimbolosAux.add(simboloAux);
                 parametros++;
             }
         }
@@ -202,7 +204,7 @@ public class AnalisadorSemantico {
     @FuncaoSemantica(106)
     public static void f6() {
 
-        constant.setGeneralA(token.getValue());
+        constant.setGeralA(token.getValue());
     }
 
   //#107: Antes de lista de identificadores em declaração de variáveis
@@ -257,10 +259,10 @@ public class AnalisadorSemantico {
 
 
         if (procedurePossuiParametros) {
-            procedure.setGeneralB(parametros);
+            procedure.setGeralB(parametros);
             for (int i = 0; i < parametros; i++) {
                 Simbolo p = pilhaSimbolos.pop();
-                p.setGeneralA(-(parametros - i));
+                p.setGeralA(-(parametros - i));
             }
         }
 
@@ -287,8 +289,11 @@ public class AnalisadorSemantico {
         Integer parametro = pilhaParametros.pop();
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "RETU", "-", String.valueOf(parametro)));
         hipotetica.IncluirAI(areaInstrucoes, 1, 0, parametro);
-        codigoIntermediario.get(pilhaProcedure.get(pilhaProcedure.size() - 1) - 1).setOperador2(areaInstrucoes.LC + "");
-        hipotetica.AlterarAI(areaInstrucoes, pilhaProcedure.get(pilhaProcedure.size() - 1), 0, areaInstrucoes.LC);
+
+        Integer procedure = pilhaProcedure.pop();
+        codigoIntermediario.get(procedure - 1).setOperador2(areaInstrucoes.LC + "");
+        hipotetica.AlterarAI(areaInstrucoes, procedure, 0, areaInstrucoes.LC);
+
         removeSimboloAuxiliar();
         nivelAtual--;
     }
@@ -320,7 +325,7 @@ public class AnalisadorSemantico {
                 throw new SemanticoException("Não é uma variável.");
             } else {
                 nivelAuxiliar = nivelAtual - simboloAux.getNivel();
-                deslocamentoAuxiliar = simboloAux.getGeneralA();
+                deslocamentoAuxiliar = simboloAux.getGeralA();
             }
         } else {
             throw new SemanticoException("Identificador \"" + token.getName() + "\" não declarado.");
@@ -348,12 +353,11 @@ public class AnalisadorSemantico {
         simboloAux = tabelaSimbolos.buscar(token.getName());
         if (simboloExiste(simboloAux)) {
             if (tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getCategoria().equals(Categoria.PROCEDURE)) {
-                pilhaAuxiliar = pilhaProcedure.pop();
+//                pilhaAuxiliar = pilhaProcedure.pop();
 
-                desvioAux = codigoIntermediario.get(pilhaAuxiliar+1);
-                desvioAux.setOperador2(String.valueOf(areaInstrucoes.LC));
-                codigoIntermediario.set(pilhaAuxiliar+1, desvioAux);
-                hipotetica.AlterarAI(areaInstrucoes, 21, 0, desvioAux.getOp2());
+//                desvioAux = codigoIntermediario.get(pilhaAuxiliar-1);
+//                desvioAux.setOperador2(String.valueOf(areaInstrucoes.LC));
+//                hipotetica.AlterarAI(areaInstrucoes, 21, 0, desvioAux.getOp2());
             } else {
                 throw new SemanticoException("Não é uma procedure.");
             }
@@ -375,12 +379,12 @@ public class AnalisadorSemantico {
 
         simboloAux = tabelaSimbolos.buscar(nomeCall);
 
-        if (simboloAux.getGeneralB() != parametros) {
+        if (simboloAux.getGeralB() != parametros) {
             throw new SemanticoException("Número de parâmetros inválido.");
         }
 
-        codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CALL", String.valueOf(nivelAtual), String.valueOf(deslocamentoAuxiliar)));
-        hipotetica.IncluirAI(areaInstrucoes, 4, nivelAuxiliar, deslocamentoAuxiliar);
+        codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CALL", String.valueOf(nivelAtual), String.valueOf(indiceTabelaSimbolos)));
+        hipotetica.IncluirAI(areaInstrucoes, 4, nivelAuxiliar, indiceTabelaSimbolos);
     }
 
   //#118: Após expressão, em comando call
@@ -531,7 +535,7 @@ public class AnalisadorSemantico {
                     codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "LEIT", "-", "-"));
                     hipotetica.IncluirAI(areaInstrucoes, 21, 0, 0);
                     Integer localNivel = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getNivel() - nivelAtual;
-                    Integer localDeslocamento = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
+                    Integer localDeslocamento = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeralA();
                     codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "ARMZ", String.valueOf(localNivel), String.valueOf(localDeslocamento)));
                     hipotetica.IncluirAI(areaInstrucoes, 4, localNivel, localDeslocamento);
                 } else {
@@ -542,15 +546,13 @@ public class AnalisadorSemantico {
 
                 if (tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getCategoria().equals(Categoria.PROCEDURE)) {
                     throw new SemanticoException("Não é possível ler uma procedure!");
-                } else if (tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getCategoria().equals(Categoria.CONSTANT)) {
-                    Integer i = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
-                    codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRCT", "-", String.valueOf(i)));
-                    hipotetica.IncluirAI(areaInstrucoes, 3, 0, i);
+                } else if (simboloAux.getCategoria().equals(Categoria.CONSTANT)) {
+                    codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRCT", "-", String.valueOf(simboloAux.getGeralA())));
+                    hipotetica.IncluirAI(areaInstrucoes, 3, 0, simboloAux.getGeralA());
                 } else {
-                    Integer nivelDiferenca = nivelAtual - tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getNivel();
-                    Integer localDeslocamento = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
-                    codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRVL", String.valueOf(nivelDiferenca), String.valueOf(localDeslocamento)));
-                    hipotetica.IncluirAI(areaInstrucoes, 2, nivelDiferenca, localDeslocamento);
+                    Integer nivelDiferenca = nivelAtual - simboloAux.getNivel();
+                    codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRVL", String.valueOf(nivelDiferenca), String.valueOf(simboloAux.getGeralA())));
+                    hipotetica.IncluirAI(areaInstrucoes, 2, nivelDiferenca, simboloAux.getGeralA());
                 }
             }
         }
@@ -702,7 +704,7 @@ public class AnalisadorSemantico {
     @FuncaoSemantica(138)
     public static void f38() {
 
-        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
+        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeralA();
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "ARMZ", String.valueOf(nivelAuxiliar), String.valueOf(deslocamentoAuxiliar)));
         hipotetica.IncluirAI(areaInstrucoes, 4, nivelAuxiliar, deslocamentoAuxiliar);
     }
@@ -723,7 +725,7 @@ public class AnalisadorSemantico {
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "COPI", "-", "-"));
         hipotetica.IncluirAI(areaInstrucoes, 28, nivelAuxiliar, deslocamentoAuxiliar);
         nivel = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getNivel() - nivelAtual;
-        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
+        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeralA();
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRVL", String.valueOf(nivel), String.valueOf(deslocamentoAuxiliar)));
         hipotetica.IncluirAI(areaInstrucoes, 2, nivel, deslocamentoAuxiliar);
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CMAI", "-", "-"));
@@ -748,7 +750,7 @@ public class AnalisadorSemantico {
 
         indiceTabelaSimbolos = pilhaFor.pop();
         nivel = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getNivel() - nivelAtual;
-        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeneralA();
+        deslocamentoAuxiliar = tabelaSimbolos.getTable().get(indiceTabelaSimbolos).getGeralA();
         codigoIntermediario.add(new Instrucao(areaInstrucoes.LC, "CRVL", String.valueOf(nivel), String.valueOf(deslocamentoAuxiliar)));
         hipotetica.IncluirAI(areaInstrucoes, 2, nivel, deslocamentoAuxiliar);
 
